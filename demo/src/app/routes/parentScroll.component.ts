@@ -1,7 +1,12 @@
 import { Component } from '@angular/core';
+import { NgFor, NgIf } from '@angular/common';
 import { BaseList } from '../lists/base-list';
+import { VirtualScrollerComponent } from 'ngx-virtual-scroller';
+import { ListItemComponent } from '../lists/list-item.component';
 
 @Component({
+  standalone: true,
+  imports: [NgFor, NgIf, VirtualScrollerComponent, ListItemComponent],
   selector: 'parent-scroll',
   template: `
 
@@ -34,13 +39,13 @@ import { BaseList } from '../lists/base-list';
   <list-item [randomHeight]="randomSize" *ngFor="let item of scroll.viewPortItems" [item]="item"> </list-item>
 
 </virtual-scroller>
-        
+
     `
 })
 export class ParentScrollComponent extends BaseList {
   constructor() {
 	super();
-	  
+
 	this.items = BaseList.generateMultipleRandomItems(10000);
     this.setToFullList();
   }

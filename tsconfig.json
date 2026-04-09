@@ -1,35 +1,25 @@
 {
   "compilerOptions": {
-	"baseUrl": "./src",
-    "rootDir": "./src",
-    "outDir": "./dist",
+    "baseUrl": "./src",
     "sourceMap": true,
     "declaration": true,
-    "module": "ES2015",
-    "moduleResolution": "node",
+    "module": "ES2022",
+    "moduleResolution": "bundler",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "importHelpers": true,
-    "target": "es5",
-    "allowSyntheticDefaultImports": true,
+    "target": "ES2022",
+    "useDefineForClassFields": false,
     "strictNullChecks": false,
     "lib": [
-      "es2018",
+      "ES2022",
       "dom"
-    ],
-    "types": [
-      "node"
     ]
   },
   "exclude": [
     "node_modules",
     "demo",
-    "dist",
-    "compiled"
+    "dist"
   ],
-  "compileOnSave": false,
-  "buildOnSave": false,
-  "angularCompilerOptions": {
-    "genDir": "compiled"
-  }
+  "compileOnSave": false
 }

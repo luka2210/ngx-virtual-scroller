@@ -1,8 +1,13 @@
-import { Component,Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { NgFor, NgIf } from '@angular/common';
 import { ListItem } from './list-item.component';
 import { BaseList } from './base-list';
+import { VirtualScrollerComponent } from 'ngx-virtual-scroller';
+import { ListItemComponent } from './list-item.component';
 
 @Component({
+  standalone: true,
+  imports: [NgFor, NgIf, VirtualScrollerComponent, ListItemComponent],
   selector: 'horizontal-list',
   template: `
     <style>
@@ -36,7 +41,7 @@ import { BaseList } from './base-list';
       [enableUnequalChildrenSizes]="randomSize"
       [horizontal]="true"
       [items]="filteredList" [RTL] = "rtl">
-      
+
       <list-item [randomWidth]="randomSize" *ngFor="let item of scroll.viewPortItems" class="inline" [item]="item"> </list-item>
     </virtual-scroller>
   `,

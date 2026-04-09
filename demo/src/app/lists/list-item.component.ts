@@ -13,6 +13,8 @@ export interface ListItem {
 }
 
 @Component({
+    standalone: true,
+    imports: [],
     selector: 'list-item',
     template: `
         <div class="avatar">{{item.index}}</div>
@@ -50,8 +52,8 @@ export class ListItemComponent {
   private static Seed: number;
   public static ResetSeed(): void {
 	ListItemComponent.Seed = Math.floor(Math.random() * Number.MAX_SAFE_INTEGER);
-  }  
-  
+  }
+
   @HostBinding('style.height')
   public get styleHeight(): string {
     if (!this.randomHeight) {

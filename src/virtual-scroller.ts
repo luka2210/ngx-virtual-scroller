@@ -4,20 +4,18 @@ import {
 	ContentChild,
 	ElementRef,
 	EventEmitter,
-	Inject,
 	Input,
 	NgModule,
 	NgZone,
 	OnChanges,
 	OnDestroy,
 	OnInit,
-	Optional,
 	Output,
+	PLATFORM_ID,
 	Renderer2,
 	ViewChild,
+	inject,
 } from '@angular/core';
-
-import { PLATFORM_ID } from '@angular/core';
 import { isPlatformServer } from '@angular/common';
 
 import { CommonModule } from '@angular/common';
@@ -90,6 +88,8 @@ export interface IViewport extends IPageInfo {
 }
 
 @Component({
+	standalone: true,
+	imports: [CommonModule],
 	selector: 'virtual-scroller,[virtualScroller]',
 	exportAs: 'virtualScroller',
 	template: `
@@ -594,15 +594,16 @@ export class VirtualScrollerComponent implements OnInit, OnChanges, OnDestroy {
 
 	protected isAngularUniversalSSR: boolean;
 
-	constructor(
-		protected readonly element: ElementRef,
-		protected readonly renderer: Renderer2,
-		protected readonly zone: NgZone,
-		protected changeDetectorRef: ChangeDetectorRef,
-		@Inject(PLATFORM_ID) platformId: Object,
-		@Optional() @Inject('virtual-scroller-default-options')
-		options: VirtualScrollerDefaultOptions
-	) {
+	protected readonly element = inject(ElementRef);
+	protected readonly renderer = inject(Renderer2);
+	protected readonly zone = inject(NgZone);
+	protected changeDetectorRef = inject(ChangeDetectorRef);
+
+	constructor() {
+		const platformId = inject(PLATFORM_ID);
+		const options: VirtualScrollerDefaultOptions =
+			inject<VirtualScrollerDefaultOptions>('virtual-scroller-default-options' as any, { optional: true })
+			?? VIRTUAL_SCROLLER_DEFAULT_OPTIONS_FACTORY();
 
 		this.isAngularUniversalSSR = isPlatformServer(platformId);
 
@@ -620,7 +621,7 @@ export class VirtualScrollerComponent implements OnInit, OnChanges, OnDestroy {
 		this.resetWrapGroupDimensions();
 	}
 
-	protected getElementSize(element: HTMLElement) : ClientRect {
+	protected getElementSize(element: HTMLElement) : DOMRect {
 		let result = element.getBoundingClientRect();
 		let styles = getComputedStyle(element);
 		let marginTop = parseInt(styles['margin-top'], 10) || 0;
@@ -634,11 +635,14 @@ export class VirtualScrollerComponent implements OnInit, OnChanges, OnDestroy {
 			left: result.left + marginLeft,
 			right: result.right + marginRight,
 			width: result.width + marginLeft + marginRight,
-			height: result.height + marginTop + marginBottom
-		};
+			height: result.height + marginTop + marginBottom,
+			x: result.x,
+			y: result.y,
+			toJSON() { return JSON.stringify(this); }
+		} as DOMRect;
 	}
 
-	protected previousScrollBoundingRect: ClientRect;
+	protected previousScrollBoundingRect: DOMRect;
 	protected checkScrollElementResized(): void {
 		let boundingRect = this.getElementSize(this.getScrollElement());
 
@@ -881,7 +885,7 @@ export class VirtualScrollerComponent implements OnInit, OnChanges, OnDestroy {
 	}
 
 	protected getScrollElement(): HTMLElement {
-		return this.parentScroll instanceof Window ? document.scrollingElement || document.documentElement || document.body : this.parentScroll || this.element.nativeElement;
+		return this.parentScroll instanceof Window ? (document.scrollingElement || document.documentElement || document.body) as HTMLElement : this.parentScroll || this.element.nativeElement;
 	}
 
 	protected addScrollEventHandlers(): void {
@@ -1336,8 +1340,7 @@ export class VirtualScrollerComponent implements OnInit, OnChanges, OnDestroy {
 
 @NgModule({
 	exports: [VirtualScrollerComponent],
-	declarations: [VirtualScrollerComponent],
-	imports: [CommonModule],
+	imports: [CommonModule, VirtualScrollerComponent],
 	providers: [
 		{
 			provide: 'virtual-scroller-default-options',

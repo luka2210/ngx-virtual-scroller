@@ -1,9 +1,14 @@
 import { Component } from '@angular/core';
+import { NgFor, NgIf } from '@angular/common';
 import { ListItem } from './list-item.component';
 import { BaseList } from './base-list';
 import { IPageInfo } from 'ngx-virtual-scroller';
+import { VirtualScrollerComponent } from 'ngx-virtual-scroller';
+import { ListItemComponent } from './list-item.component';
 
 @Component({
+  standalone: true,
+  imports: [NgFor, NgIf, VirtualScrollerComponent, ListItemComponent],
   selector: 'list-with-api',
   template: `
     <label>Add items at Top <input type="checkbox" (change)="shouldPrependItems = !shouldPrependItems" /></label>

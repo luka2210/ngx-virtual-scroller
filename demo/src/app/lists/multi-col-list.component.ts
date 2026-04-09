@@ -1,8 +1,13 @@
 import { Component } from '@angular/core';
+import { NgFor, NgIf } from '@angular/common';
 import { ListItem } from './list-item.component';
 import { BaseList } from './base-list';
+import { VirtualScrollerComponent } from 'ngx-virtual-scroller';
+import { ListItemComponent } from './list-item.component';
 
 @Component({
+  standalone: true,
+  imports: [NgFor, NgIf, VirtualScrollerComponent, ListItemComponent],
   selector: 'multi-col-list',
   template: `
 
@@ -30,7 +35,7 @@ import { BaseList } from './base-list';
     <virtual-scroller #scroll
       [enableUnequalChildrenSizes]="randomSize"
       [items]="filteredList">
-      
+
       <list-item [randomHeight]="randomSize" *ngFor="let item of scroll.viewPortItems" class="inline" [item]="item"> </list-item>
     </virtual-scroller>
   `,

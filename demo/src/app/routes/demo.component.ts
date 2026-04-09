@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
 
 @Component({
+  standalone: true,
+  imports: [],
   selector: 'demo',
   template: `
-        
+
 <div class="posts" id="demo">
   <h1 class="content-subhead">Demo</h1>
   <section class="post">
@@ -18,7 +20,7 @@ import { Component } from '@angular/core';
     </div>
   </section>
 </div>
-        
+
     `
 })
 export class DemoComponent {

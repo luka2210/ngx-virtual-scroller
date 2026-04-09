@@ -1,8 +1,13 @@
 import { Component } from '@angular/core';
+import { NgFor, NgIf } from '@angular/common';
 import { ListItem } from './list-item.component';
 import { BaseList } from './base-list';
+import { VirtualScrollerComponent } from 'ngx-virtual-scroller';
+import { ListItemComponent } from './list-item.component';
 
 @Component({
+  standalone: true,
+  imports: [NgFor, NgIf, VirtualScrollerComponent, ListItemComponent],
   selector: 'vertical-list',
   template: `
     <button (click)="sortByName()">Sort By Name</button>
